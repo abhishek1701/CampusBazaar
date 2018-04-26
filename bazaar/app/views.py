@@ -44,10 +44,11 @@ def login_(request):
 		login(request, user)
 		# return HttpResponse("login successful")
 		if(next_==''):
-			profile = Profile.objects.filter(user=user)[0]
-			ads =  list(Advertisement.objects.filter(user=profile))
-			encoding = urllib.parse.urlencode({'ads':ads})
-			return render(request, 'feed.html', {'ads':ads,'media_url': MEDIA_URL})
+			# profile = Profile.objects.filter(user=user)[0]
+			# ads =  list(Advertisement.objects.filter(user=profile))
+			# encoding = urllib.parse.urlencode({'ads':ads,'media_url':MEDIA_URL})
+			return HttpResponseRedirect('/app/feed/')
+			# return render(request, 'feed.html', {'ads':ads,'media_url': MEDIA_URL})
 		else:
 			return HttpResponseRedirect(next_)
 	else:
@@ -138,20 +139,21 @@ def tagForm(request):
 
 
 @csrf_exempt
-# @login_required(login_url='/app/')
+@login_required(login_url='/app/')
 def feed(request):
 	assert(request.method == 'GET')
-	ads = request.GET.get('ads','')
-	media_url=request.GET.get('media_url','')
-	return render(request, 'feed.html', {'ads':ads,'media_url': media_url})
+	profile = Profile.objects.filter(user=request.user)[0]
+	ads =  list(Advertisement.objects.filter(user=profile))
+	return render(request, 'feed.html', {'ads':ads,'media_url': MEDIA_URL})
 
 
 @csrf_exempt
+@login_required(login_url='/app/')
 def userProfile(request):
 	assert(request.method == 'GET')
 	profile = Profile.objects.filter(user=request.user)[0]
 	ads =  list(Advertisement.objects.filter(user=profile))
-	return render(request, 'userprofile.html', {'profile':profile,'ads':ads})
+	return render(request, 'userprofile.html', {'profile':profile,'ads':ads,'media_url': MEDIA_URL})
 
 @csrf_exempt
 def product(request):
@@ -203,6 +205,13 @@ def bidList(request):
 	return render(request,'bidlist.html',{'bids':bids,'next':next_})
 
 
+
+@csrf_exempt
+def logout_(request):
+	logout(request)
+	encoding = urllib.parse.urlencode({'loginstatus':"successfully logout the bazaar"})
+	return HttpResponseRedirect('/app/?'+encoding)
+	return HttpResponseRedirect('/')
 
 
 

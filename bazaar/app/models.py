@@ -45,4 +45,3 @@ class CounterOffer(models.Model):
 		return str(self.id)
 
 
-		

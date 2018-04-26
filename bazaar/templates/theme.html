@@ -75,7 +75,7 @@
       <nav class="navbar navbar-inverse" style="background-color: #428ccc">
         <div class="container-fluid">
           <div class="navbar-header" >
-            <a class="navbar-brand" href="{% url 'loginURL' %}">Campus Bazaar</a>
+            <a class="navbar-brand" href="{% url 'feed' %}">Campus Bazaar</a>
             <!-- homeURL -->
           </div>
           <!-- searchURL -->
@@ -93,11 +93,10 @@
           </ul> -->
 
           <ul class="nav navbar-nav navbar-right">
-            <li><a href="{% url 'loginURL' %}?user={{request.user.id}}"><span class="glyphicon glyphicon-eye-open"></span> View Profile </a></li>
-            <li><a href="{% url 'loginURL' %}"><span class="glyphicon glyphicon-th"></span> Tags </a></li>
-            <!-- Topics -->
-            <li><a href="{% url 'loginURL' %}"><span class="glyphicon glyphicon-edit"></span> Post Advertisment </a></li>
-            <li><a href="{% url 'loginURL' %}"><span class="glyphicon glyphicon-log-out"></span> Logout </a></li>
+            <li><a href="{% url 'userProfile' %}"><span class="glyphicon glyphicon-eye-open"></span> View Profile </a></li>
+            <li><a href="#"><span class="glyphicon glyphicon-th"></span> Notifications</a></li>
+            <li><a href="{% url 'adForm' %}"><span class="glyphicon glyphicon-edit"></span> Post Advertisment </a></li>
+            <li><a href="{% url 'logoutURL' %}"><span class="glyphicon glyphicon-log-out"></span> Logout </a></li>
           </ul>
         </div>
       </nav>
