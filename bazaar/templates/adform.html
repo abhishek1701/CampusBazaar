@@ -1,0 +1,38 @@
+<!-- HTML file to display question form using django crispy forms -->
+{% extends 'theme.html' %}
+{# Don't forget that one ! #}
+{% load static %}
+
+{# Load the tag library #}
+{% load bootstrap3 %}
+{% load crispy_forms_tags %}
+{% load crispy_forms_field %}
+
+{# Load CSS and JavaScript #}
+{% bootstrap_css %}
+{% bootstrap_javascript %}
+
+{% block head %}
+<style type="text/css">
+	.help-block {
+            display: block;
+            margin-top: 5px;
+            margin-bottom: 10px;
+            color: #f5f5f5;
+</style>
+
+{% endblock %}  
+
+
+{% block body %}
+<div style="color: black">
+	<br>
+	<p style="color:red">{{adstatus}}</p>
+	<br>
+    <form action="{% url 'postAdURL' %}" method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        {% crispy adform %}
+    </form>
+</div>
+
+{% endblock %}

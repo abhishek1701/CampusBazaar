@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en" style="height:100%">
+	<body style="width:100%; height:100%; text-align: center;">
+		<table style="width: 100%; height: 100%; position: absolute; top: 0; bottom: 0; left: 0; right: 0">
+		<tr style="width:100%; height:30%">
+			<td><p style="font-size: 100px;">Campus Bazaar</p></td>
+		</tr>
+
+		<tr style="height: 10%">
+			<td>
+				<p style="font-size: 30px; ">Signup</p>
+			</td>
+		</tr>
+
+		<tr>
+			<td style="width: 100%; height: 60%;">
+				<center>
+					<p> {{signupstatus}} <br></p>
+					<form method="POST" enctype="multipart/form-data" action="{% url 'signupURL' %}">{% csrf_token %}
+				    	<table>
+				    		{{ signupform }}
+						</table>
+						<input type="submit" value="Signup" />
+					</form>
+					<form method="GET" action="{% url 'index' %}">{% csrf_token %}
+						<input type="submit" value="Login" />
+					</form>
+				</center>
+			</td>
+		</tr>
+		</table>
+	</body>
+</html>

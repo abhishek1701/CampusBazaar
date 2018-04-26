@@ -1,0 +1,52 @@
+<!-- HTML file to display question form using django crispy forms -->
+{% extends 'theme.html' %}
+{# Don't forget that one ! #}
+{% load static %}
+
+{# Load the tag library #}
+{% load bootstrap3 %}
+{% load crispy_forms_tags %}
+{% load crispy_forms_field %}
+
+{# Load CSS and JavaScript #}
+{% bootstrap_css %}
+{% bootstrap_javascript %}
+
+{% block head %}
+	<style type="text/css">
+		body{
+			color: black
+		}
+	</style>
+
+{% endblock %}  
+
+
+{% block body %}
+
+
+<body>
+	<p style="color: red">{{bidstatus}}</p>
+	<table style="width:100%;color: black">
+          <tr>
+            <th>Name</th>
+            <th>Comment</th> 
+            <th>Bid</th>
+            <th>Accept</th>
+          </tr>
+          {% for bid in bids %}
+                <tr>
+                    <td>{{bid.bidder}}</td>
+                    <td>{{bid.comment}}</td> 
+                    <td>{{bid.bid}}</td> 
+                    <td>
+                    	<button> ACCEPT</button>
+                    </td> 
+              </tr>
+          {% endfor %}
+        </table>
+
+</body>
+{% endblock %}
+
+

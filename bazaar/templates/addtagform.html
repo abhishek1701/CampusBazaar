@@ -1,0 +1,32 @@
+<!-- Display list of all the topics in the database -->
+<!-- Display forms to add a new topic or select topics to follow from existing topics -->
+{% extends "theme.html" %}
+{# Load the tag library #}
+{% load bootstrap3 %}
+{% load crispy_forms_tags %}
+{% load crispy_forms_field %}
+
+{# Load CSS and JavaScript #}
+{% bootstrap_css %}
+{% bootstrap_javascript %}
+
+{% block head %}
+<title>Home</title>
+<style type="text/css">
+	body{
+		color: black;
+	}
+</style>
+{% endblock %}  
+
+{% block body %}
+<div style="color: black">
+<p style="color: red"> {{tagstatus}} <br></p>
+<form method="POST" action="{% url 'addtagURL' %}">{% csrf_token %}
+	<table>
+		{% crispy addtagform %}
+	</table>
+</form>
+<br>
+</div>
+{% endblock %}

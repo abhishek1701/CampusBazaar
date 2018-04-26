@@ -1,0 +1,136 @@
+<!-- HTML file to display question form using django crispy forms -->
+{% extends 'theme.html' %}
+{# Don't forget that one ! #}
+{% load static %}
+
+{# Load the tag library #}
+{% load bootstrap3 %}
+{% load crispy_forms_tags %}
+{% load crispy_forms_field %}
+
+{# Load CSS and JavaScript #}
+{% bootstrap_css %}
+{% bootstrap_javascript %}
+{% block head %}
+<link href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+<script src="//netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
+<script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+<style type="text/css">
+    .navbar-inverse .navbar-brand {
+             color: white;
+             margin: 5px;
+             font-size: 32px; 
+             font-family: "Times New Roman", Times, serif;
+        }
+
+    #profilebox{
+        display: flex;
+        height: 250px;
+        width: 100%;
+    }
+    #profiledetails{
+        /*min-height: 300px;*/
+        height: 100%;
+    }
+    #profileimage{
+        height: 280px;
+        width: 280px;
+        overflow: hidden;
+    }
+    
+    #edit{
+        position: absolute;
+        bottom: 0;
+        padding: 1px;
+
+    }
+    #edit button{
+        width: 100px;
+    }
+    #profiledetails.glyphicon { 
+        margin-bottom: 10px;
+        margin-right: 20px;
+       
+        color: black;
+    }
+    p{
+        color: black;
+        margin: 1px;
+    }
+    h1,h2,h3{
+        color: black;
+        margin: 1px;
+    }
+    h4{
+        color: black;
+        margin: 1px;
+        height: 20%;
+    }
+
+
+   
+    table, th, td {
+        border: 1px solid black;
+        color: black;
+    }
+</style>
+
+{% endblock %} 
+
+{% block body %}
+    
+<div class="container">
+<div class="row">
+    <div class="col-sm-12">
+        <div class="well well-md">
+            <div class="row" id ="profilebox">
+                <div class="col-sm-6 " id="profileimage">
+                    <img src="../media/ad_pic/22281906_1952773488269281_111137123882776572_n.jpg" alt="" class="img-rounded img-responsive" />
+                </div>
+                <div class="col-sm-6" id="profiledetails">
+                    <h4 id="profilename">{{profile.name}}</h4>
+                    <p>Huaz Khas IITD, New Delhi<i class="glyphicon glyphicon-map-marker"></i></p>
+                    <br>
+                    <p><i class="glyphicon glyphicon-envelope"></i>{{profile.email}}<p>
+                    <br>
+                    <p> <i class="glyphicon glyphicon-earphone"></i>{{profile.phone}}</p>
+                    <!-- Split button -->
+                    <div class="btn-group" id="edit">
+                            <button type="button" class="btn btn-primary" >Edit</button> 
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+        <table style="width:100%">
+          <tr>
+            <th>Posted Advertisement</th>
+            <th>Status</th> 
+            <th>Delete</th>
+          </tr>
+          {% for ad in ads %}
+                
+                <tr>
+<td>
+<form action="{% url 'bidListURL' %}" method="POST">
+
+            <input type="hidden" name="ad" value={{ad}} />
+            <input type="hidden" name="previous" value=window.location.href />
+
+            <a href="#" onclick="this.parentNode.submit()">{{ad.title}}</a>
+
+</form>
+</td>
+                    <!-- <td> <a href="{% url 'bidListURL' %}/?ad=3">{{ad.title}}</a>  </td> -->
+                    <td>{{ad.status}}</td> 
+                    <td><i class=" glyphicon glyphicon-remove"></i></td>
+              </tr>
+          {% endfor %}
+        </table>
+         
+</div>
+
+{% endblock %}
+

@@ -1,0 +1,181 @@
+<!-- HTML file to display question form using django crispy forms -->
+{% extends 'theme.html' %}
+{# Don't forget that one ! #}
+{% load static %}
+
+{# Load the tag library #}
+{% load bootstrap3 %}
+{% load crispy_forms_tags %}
+{% load crispy_forms_field %}
+
+{# Load CSS and JavaScript #}
+{% bootstrap_css %}
+{% bootstrap_javascript %}
+
+{% block head %}
+	<style type="text/css">
+		.bg-1 { 
+            background-color:white; 
+            
+        }
+		#searchBar{
+			width: 100%;
+		}
+		#product_list{
+				/*display: inline-block;*/
+				background-color: white
+		}
+	
+		#product_box{
+			/*background: gray;*/
+			max-width: 300px;
+			min-height: 180px;
+			padding: 10px;
+			margin:10px;
+			background-color: white;
+			overflow: hidden;
+			border-style: solid;
+    		border-width: 2px;
+    		border-color: black;
+    		display:flex;
+    		color: black;
+ 
+
+		}
+		#product_image{ 
+			border: 1px double gray;
+			border-radius: 2px;
+			outline: 1px solid gray;
+			outline-offset:1px;
+			overflow: hidden;
+		}
+		#product_detail{
+			min-width: 120px;
+
+		}
+		#product_title{
+			display: block;
+			height: 30%;
+			text-align: center;
+		}
+
+		#price_tag { 
+			display: inline-block;
+			height: 50%;
+			width: 100%;
+			margin: 0px;
+			text-align: center;
+			/*text-align: center;*/
+
+		}
+		#price{  }
+
+		#product_view{	
+			display: block;
+			height: 20%;
+			padding: 4px;
+			width: 100%;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+		}
+
+
+		button {
+		  /*height: 30px;*/
+		  width: 100px;
+		  border-radius: 4px;
+		  background: #428cca;
+		}
+		p{
+			font-size: 15px;
+		}
+		img {
+			max-width: 100%;
+			/*width: auto;*/
+			height: auto;
+		}
+	</style>
+
+{% endblock %}  
+
+
+{% block body %}
+
+
+<body>
+	<ul class="col-lg-6" id="searchBar">
+        <form class="navbar-form" role="search" method="POST" action="{% url 'loginURL' %}">
+        
+        {% csrf_token %}
+          <div class="input-group">
+              <input type="text" class="form-control" placeholder="Search" name="search_query" id="search_query">
+              <div class="input-group-btn">
+                  <button class="btn btn-default" type="submit"><i class="glyphicon glyphicon-search"></i></button>
+              </div>
+          </div>
+        </form>
+    </ul>
+
+	<div class="container" >
+		<ul id="product_list" >
+			{% for ad in ads %}
+
+			<li style="display: inline-block;"> 
+				<div class="container" id="product_box">
+					<div  id="product_image">
+						<img src={{media_url}}{{ad.image}} >
+					</div>
+
+					<div  id="product_detail">
+
+						<!-- <div id="product_detail"> -->
+
+							<header id="product_title"> {{ad.title}}</header> 
+
+							<div class="container" id="price_tag">
+								<p style="display:  inline-block;"> Price </p>
+								<p id ="price" style="display:  inline-block;"> {{ad.price}}</p>
+							</div>
+
+
+							<div id="product_view" >
+<button id="view_button" onclick="location.href = '/app/product/?ad={{ad}}';" > View </button>
+							</div>
+							
+						<!-- </div> -->
+					</div>
+				</div>
+			</li>
+			{% endfor %}
+		</ul>
+	</div>
+
+<<!-- script>
+	document.getElementById("view_button").onclick = function() {myFunction()};
+
+	function myFunction() {
+		window.location = "/app/product/?ad="+{{ad}};
+	    // document.getElementById("demo").innerHTML = "YOU CLICKED ME!";
+	}
+</script> -->
+
+
+</body>
+{% endblock %}
+
+<!-- <!DOCTYPE html>
+ <head>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.0/jquery.min.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+	<meta charset="utf-8">
+	<link rel="stylesheet" href="../static/styles.css">
+	<title></title>
+
+
+</head> -->
