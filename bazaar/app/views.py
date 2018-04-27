@@ -118,6 +118,11 @@ def adForm(request):
 
 
 # @login_required(login_url='/index/')
+def tagForm(request):
+	assert(request.method == 'GET')
+	tagstatus = request.GET.get('tagstatus','')
+	return render(request,'addtagform.html',{'addtagform':AddTagForm(),'tagstatus':tagstatus})
+# @login_required(login_url='/index/')
 def addTag(request):
 	assert(request.method == 'POST')
 	tag_name = request.POST['tag']
@@ -130,21 +135,54 @@ def addTag(request):
 	encoding = urllib.parse.urlencode({'tagstatus':"Tag already exists!"})
 	return HttpResponseRedirect('/app/tag_form/?' + encoding)
 
-
 # @login_required(login_url='/index/')
-def tagForm(request):
+def removeTagForm(request):
 	assert(request.method == 'GET')
 	tagstatus = request.GET.get('tagstatus','')
-	return render(request,'addtagform.html',{'addtagform':AddTagForm(),'tagstatus':tagstatus})
+	return render(request,'removetagform.html',{'removetagform':RemoveTagForm(),'tagstatus':tagstatus})
 
+def removeTag(request):
+	assert(request.method=='POST')
+	tags = [Tag.objects.get(tag_name=tag_id) for tag_id in request.POST.getlist('tags')]
+	try:
+		for tag in tags:
+			tag.delete()
+		encoding = urllib.parse.urlencode({'tagstatus':"Tag deleted successfully!"})
+		return HttpResponseRedirect('/app/remove_tag_form/?' + encoding)
+	except Tag.DoesNotExist:
+		encoding = urllib.parse.urlencode({'tagstatus':"Tag doesn't exists!"})
+		return HttpResponseRedirect('/app/remove_tag_form/?' + encoding)
+
+
+
+def filterAd(filter,profile):
+	if(filter=='ALL'):
+		return Advertisement.objects.exclude(user=profile)
+	else:
+		tag=Tag.objects.get(tag_name=filter)
+		return Advertisement.objects.filter(tags__tag_name=tag).exclude(user=profile)
+
+		
 
 @csrf_exempt
 @login_required(login_url='/app/')
 def feed(request):
 	assert(request.method == 'GET')
+	tags=list(Tag.objects.all())
+	print(tags[0].tag_name)
 	profile = Profile.objects.filter(user=request.user)[0]
-	ads =  list(Advertisement.objects.filter(user=profile))
-	return render(request, 'feed.html', {'ads':ads,'media_url': MEDIA_URL})
+	ad_filter=request.GET.get('filter','')
+	ads=[]
+	if(ad_filter==''):
+		ads=filterAd('ALL',profile)
+	else:
+		ads=filterAd(ad_filter,profile)
+
+	# ads =  list(Advertisement.objects.filter(user=profile))
+	# ads=filterAd('girl',profile)
+	return render(request, 'feed.html', {'tags':tags,'ads':ads,'media_url': MEDIA_URL})
+
+
 
 
 @csrf_exempt
@@ -152,7 +190,15 @@ def feed(request):
 def userProfile(request):
 	assert(request.method == 'GET')
 	profile = Profile.objects.filter(user=request.user)[0]
-	ads =  list(Advertisement.objects.filter(user=profile))
+	Ads =  list(Advertisement.objects.filter(user=profile))
+	ads=[]
+	for ad in Ads:
+		co=list(CounterOffer.objects.filter(ad_id=ad))
+		ad_stat={}
+		ad_stat['offer_count']=len(co)
+		ad_stat['ad']=ad
+		ads.append(ad_stat)
+
 	return render(request, 'userprofile.html', {'profile':profile,'ads':ads,'media_url': MEDIA_URL})
 
 @csrf_exempt
@@ -190,7 +236,6 @@ def bid(request):
 @csrf_exempt
 def bidList(request):
 	assert(request.method=='POST')
-	next_ = request.POST['previous']
 	ad_id = request.POST['ad']
 	# print(next_)
 	
@@ -202,7 +247,9 @@ def bidList(request):
 		bid={'bidder':bidder.name,'phone':bidder.phone,'comment':offer.comment,'bid':offer.offer}	
 		bids.append(bid)
 	print (bids)
-	return render(request,'bidlist.html',{'bids':bids,'next':next_})
+	return render(request,'bidlist.html',{'bids':bids})
+
+
 
 
 

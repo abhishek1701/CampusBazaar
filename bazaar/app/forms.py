@@ -3,7 +3,22 @@ from dal_select2.widgets import ModelSelect2Multiple
 from crispy_forms.layout import Layout, Fieldset, ButtonHolder, Submit
 from crispy_forms.helper import FormHelper
 from app.models import Tag, Advertisement
+
+from django import forms
+from django.utils.encoding import force_text
+from django.utils.html import format_html
+from django.utils.safestring import mark_safe
 # from app.models import 
+
+# class HorizontalCheckboxRenderer(forms.CheckboxSelectMultiple.renderer):
+#     def render(self):
+#         id_ = self.attrs.get('id', None)
+#         start_tag = format_html('<div id="{0}">', id_) if id_ else '<div>'
+#         output = [start_tag]
+#         for widget in self:
+#             output.append(format_html(u'<span>{0}</span>', force_text(widget)))
+#         output.append('</span>')
+#         return mark_safe('\n'.join(output))
 
 class SignUpForm(forms.Form):
 	name = forms.CharField(max_length = 100)
@@ -16,6 +31,7 @@ class SignUpForm(forms.Form):
 		queryset = Tag.objects.all(),
 		widget = forms.CheckboxSelectMultiple(),
 		help_text = "<strong>Note:</strong> Select relevant tags from the above.",
+
 	)
 	def __init__(self, *args, **kwargs):		
 		super(SignUpForm, self).__init__(*args, **kwargs)
@@ -63,6 +79,22 @@ class AddTagForm(forms.Form):
 			'tag',
 			Submit('submit', u'Add', css_class='btn btn-success'), 
 	)
+class RemoveTagForm(forms.Form):
+	tags = forms.ModelMultipleChoiceField(
+		queryset = Tag.objects.all(),
+		widget = forms.CheckboxSelectMultiple(),
+		help_text = "<strong>Note:</strong> Select relevant tags to remove.",
+
+	)
+	def __init__(self, *args, **kwargs):		
+		super(RemoveTagForm, self).__init__(*args, **kwargs)
+		self.helper = FormHelper()
+		self.helper.layout = Layout(
+			'tags',
+			Submit('submit', u'Remove', css_class='btn btn-success'), 
+	)
+
+
 class BidForm(forms.Form):
 	bid = forms.FloatField()
 	comment=forms.CharField()

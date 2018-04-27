@@ -1,0 +1,77 @@
+<!-- HTML file to display question form using django crispy forms -->
+{% extends 'theme.html' %}
+{# Don't forget that one ! #}
+{% load static %}
+
+{# Load the tag library #}
+{% load bootstrap3 %}
+{% load crispy_forms_tags %}
+{% load crispy_forms_field %}
+
+{# Load CSS and JavaScript #}
+{% bootstrap_css %}
+{% bootstrap_javascript %}
+
+{% block head %}
+	<style type="text/css">
+		.bg-1 { 
+            background-color:white;
+
+        }
+		p{
+			color: black;
+		}
+		#product{
+			display: flex;
+		}
+		#product button{
+			position: absolute;
+			/*bottom: ;*/
+			background-color:#428bcd;
+			vertical-align: bottom;
+
+		}
+		#product_detail{
+			color:black;
+		}
+		
+	</style>
+
+{% endblock %}  
+
+
+{% block body %}
+
+
+<body>
+	<p style="color: red">{{bidstatus}}</p>
+	<div id="product" >
+		<div  id="product_image">
+			<img src={{media_url}}{{ad.image}} >
+		</div>
+
+		<div  id="product_detail">
+		<!-- <div id="product_detail"> -->
+			<header id="product_title"> {{ad.title}}</header> 
+			<p style="display:  inline-block;"> Price </p>
+			<p id ="price" style="display:  inline-block;"> {{ad.price}}</p>
+			<p id="product_description">{{ad.description}}</p>
+			<form method="POST"  action="{% url 'bidURL' %}">{% csrf_token %}
+		    	<table>
+		    		{{ bidform }}
+				</table>
+			<input type="hidden" name="ad" value="{{ad.id}}"/>
+
+			<input type="submit" value="BID" />
+			</form>
+			
+		<!-- </div> -->
+		</div>
+
+			
+	</div>
+
+</body>
+{% endblock %}
+
+

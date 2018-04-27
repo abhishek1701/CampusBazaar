@@ -25,7 +25,7 @@
 
     #profilebox{
         display: flex;
-        height: 200px;
+        height: 250px;
         width: 100%;
     }
     #profiledetails{
@@ -73,29 +73,6 @@
         border: 1px solid black;
         color: black;
     }
-
-    #table1 {
-        font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
-        border-collapse: collapse;
-        width: 100%;
-    }
-    
-    #table1 td, #table1 th {
-        border: 1px solid #ddd;
-        padding: 8px;
-    }
-
-    #table1 tr:nth-child(even){background-color: #f2f2f2;}
-
-    #table1 tr:hover {background-color: #ddd;}
-
-    #table1 th {
-        padding-top: 12px;
-        padding-bottom: 12px;
-        text-align: left;
-        background-color: #3e80cd;
-        color: white;
-    }
 </style>
 
 {% endblock %} 
@@ -108,14 +85,15 @@
         <div class="well well-md">
             <div class="row" id ="profilebox">
                 <div class="col-sm-6 " id="profileimage">
-                    <img src={{media_url}}{{profile.image}} width="200" height="200"/>
+                    <img src={{media_url}}{{profile.image}}/>
                 </div>
                 <div class="col-sm-6" id="profiledetails">
-                    <h1 id="profilename">{{profile.name}}</h1>
+                    <h4 id="profilename">{{profile.name}}</h4>
+                    <p>Huaz Khas IITD, New Delhi<i class="glyphicon glyphicon-map-marker"></i></p>
                     <br>
-                    <p><i class="glyphicon glyphicon-envelope">&nbsp</i>{{profile.email}}<p>
+                    <p><i class="glyphicon glyphicon-envelope"></i>{{profile.email}}<p>
                     <br>
-                    <p> <i class="glyphicon glyphicon-earphone">&nbsp</i>{{profile.phone}}</p>
+                    <p> <i class="glyphicon glyphicon-earphone"></i>{{profile.phone}}</p>
                     <!-- Split button -->
                     <div class="btn-group" id="edit">
                             <button type="button" class="btn btn-primary" >Edit</button> 
@@ -126,23 +104,29 @@
     </div>
 </div>
 
-        <table id="table1" style="width:100%">
+        <table style="width:100%">
           <tr>
             <th>Posted Advertisement</th>
-            <th>Offers</th> 
+            <th>Status</th> 
+            <th>Delete</th>
           </tr>
           {% for ad in ads %}
-         <tr>
-                    <td>
-                    <form action="{% url 'bidListURL' %}" method="POST">
+                
+                <tr>
+<td>
+<form action="{% url 'bidListURL' %}" method="POST">
 
-                            <input type="hidden" name="ad" value={{ad.ad}} />
-                            <a href="#" onclick="this.parentNode.submit()">{{ad.ad.title}}</a>
+            <input type="hidden" name="ad" value={{ad}} />
+            <input type="hidden" name="previous" value=window.location.href />
 
-                    </form>
-                    </td>
-                    <td>{{ad.offer_count}}</td> 
-         </tr>
+            <a href="#" onclick="this.parentNode.submit()">{{ad.title}}</a>
+
+</form>
+</td>
+                    <!-- <td> <a href="{% url 'bidListURL' %}/?ad=3">{{ad.title}}</a>  </td> -->
+                    <td>{{ad.status}}</td> 
+                    <td><i class=" glyphicon glyphicon-remove"></i></td>
+              </tr>
           {% endfor %}
         </table>
          

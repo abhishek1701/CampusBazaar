@@ -1,0 +1,117 @@
+
+
+<!-- Basic HTML theme used in all HTML pages of the website.
+    Defines updated properties of the css classes used in other files  -->
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en" style="height:100%">
+   <head>
+      <meta charset="utf-8"> 
+      <meta name="viewport" content="width=device-width, initial-scale=1">
+      <link rel="stylesheet" href="{% static 'global/css/bootstrap.min.css' %}">
+      <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+      <script src="{% static 'global/js/bootstrap.min.js' %}"></script>
+      <style>
+
+        .navbar {
+          background-color: #428cca;
+        }
+        .bg-1 { 
+            /*background-color:gray; */
+            color: gray;
+        }
+
+        .navbar-form .input-group {
+            display: inline-table;
+            vertical-align: middle;
+        }
+        .navbar-form .input-group .input-group-addon,
+        .navbar-form .input-group .input-group-btn,
+        .navbar-form .input-group .form-control {
+            width: auto;  
+        }
+
+        .navbar-form .input-group {
+              width: 100%;
+        }
+
+        .navbar-form .input-group .input-group-addon,
+        .navbar-form .input-group .input-group-btn {
+              width: 1px;
+        }
+        .navbar-form .input-group .form-control {
+                width: 100%;
+        }
+        .jumbotron {
+          background-color: #428ccc;
+          background:#FFFFFF;
+          border-radius: 20px;
+          font-family: Cambria;
+          padding-left: 10px;
+          color: #000000
+        }
+        .nav.navbar-nav.navbar-right li a {
+            color: white;
+        }
+        .navbar-inverse .navbar-brand {
+             color: white;
+             margin: 5px;
+             font-size: 32px; 
+             font-family: "Times New Roman", Times, serif;
+        }
+        .navbar {
+            position: relative;
+            min-height: 60px;
+            margin-bottom: 10px;
+            border: 0px solid transparent;
+        }
+      </style>
+      {% block head %}{% endblock %}      
+   </head>
+	
+   <body style="height:100%; color: black">
+
+      <nav class="navbar navbar-inverse" style="background-color: #428ccc">
+        <div class="container-fluid">
+          <div class="navbar-header" >
+            <a class="navbar-brand" href="{% url 'feed' %}">Campus Bazaar</a>
+            <!-- homeURL -->
+          </div>
+          <!-- searchURL -->
+          <!-- <ul class="col-lg-6">
+            <form class="navbar-form" role="search" method="POST" action="{% url 'loginURL' %}">
+            
+            {% csrf_token %}
+              <div class="input-group">
+                  <input type="text" class="form-control" placeholder="Search" name="search_query" id="search_query">
+                  <div class="input-group-btn">
+                      <button class="btn btn-default" type="submit"><i class="glyphicon glyphicon-search"></i></button>
+                  </div>
+              </div>
+            </form>
+          </ul> -->
+
+          <ul class="nav navbar-nav navbar-right">
+            <li><a href="{% url 'userProfile' %}"><span class="glyphicon glyphicon-eye-open"></span> View Profile </a></li>
+            <li><a href="#"><span class="glyphicon glyphicon-th"></span> Notifications</a></li>
+            <li><a href="{% url 'adForm' %}"><span class="glyphicon glyphicon-edit"></span> Post Advertisment </a></li>
+            <li><a href="{% url 'logoutURL' %}"><span class="glyphicon glyphicon-log-out"></span> Logout </a></li>
+          </ul>
+        </div>
+      </nav>
+      
+      <div class="bg-1">
+        <div style="margin-left:3%; margin-right:3%;  color: white">
+         {% block body %}
+            Body content
+         {% endblock %}
+         <br>
+        </div>
+      </div>
+        
+      
+   </body>
+</html>
+
+
