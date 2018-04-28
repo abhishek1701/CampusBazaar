@@ -1,7 +1,8 @@
+from django.db.models import Q
 from django.shortcuts import render, HttpResponse
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
-from app.models import Profile, Advertisement, CounterOffer, Tag
+from app.models import *
 from django.views.decorators.csrf import csrf_exempt
 from django.http import HttpResponseRedirect
 from django.contrib.auth.forms import AuthenticationForm
@@ -9,7 +10,7 @@ from django.contrib.auth.decorators import login_required
 from bazaar.settings import MEDIA_ROOT, MEDIA_URL
 from app.forms import *
 import urllib
-
+from . import constants
 # Create your views here.
 # def index(request):
 #     return HttpResponse("Hello, world. You're at the polls index.")
@@ -153,16 +154,12 @@ def removeTag(request):
 		encoding = urllib.parse.urlencode({'tagstatus':"Tag doesn't exists!"})
 		return HttpResponseRedirect('/app/remove_tag_form/?' + encoding)
 
-
-
 def filterAd(filter,profile):
 	if(filter=='ALL'):
 		return Advertisement.objects.exclude(user=profile)
 	else:
 		tag=Tag.objects.get(tag_name=filter)
 		return Advertisement.objects.filter(tags__tag_name=tag).exclude(user=profile)
-
-		
 
 @csrf_exempt
 @login_required(login_url='/app/')
@@ -181,8 +178,6 @@ def feed(request):
 	# ads =  list(Advertisement.objects.filter(user=profile))
 	# ads=filterAd('girl',profile)
 	return render(request, 'feed.html', {'tags':tags,'ads':ads,'media_url': MEDIA_URL})
-
-
 
 
 @csrf_exempt
@@ -221,18 +216,26 @@ def bid(request):
 	ad_id=request.POST['ad']
 	ad=Advertisement.objects.get(id=ad_id)
 	profile=Profile.objects.get(user=request.user)
+		
 	try:
+		#update counter-offer
 		co=CounterOffer.objects.get(ad_id=ad,user_id=profile)
 		co.offer=bid
 		co.comment=comment
 		co.save()
+		#add notification
+		Notification.objects.create(ad_id=ad,seller=ad.user,buyer=profile,notify_type=constants.UPDATE_BID,read_status=False)
 		return render(request, 'product.html', {'bidform':BidForm(),'ad':ad,'media_url': MEDIA_URL,'bidstatus':'bid updated successfully'})
 
 	except CounterOffer.DoesNotExist:
 		CounterOffer.objects.create(ad_id=ad,user_id=profile,comment=comment,offer=bid)
+		#add notification
+		Notification.objects.create(ad_id=ad,seller=ad.user,buyer=profile,
+			notify_type=constants.NEW_BID,read_status=False)
 		return render(request, 'product.html', {'bidform':BidForm(),'ad':ad,'media_url': MEDIA_URL,'bidstatus':'bid added successfully'})
 
 
+#fetch list of bids for a particular advertisement
 @csrf_exempt
 def bidList(request):
 	assert(request.method=='POST')
@@ -250,9 +253,6 @@ def bidList(request):
 	return render(request,'bidlist.html',{'bids':bids})
 
 
-
-
-
 @csrf_exempt
 def logout_(request):
 	logout(request)
@@ -261,4 +261,26 @@ def logout_(request):
 	return HttpResponseRedirect('/')
 
 
+################################### NOTIFICATIONS ##################################
 
+@csrf_exempt
+def view_notifications(request):
+	user = request.user
+	criterion1 = Q(buyer=user) & (Q(notify_type=constants.ACCEPT_BID) | Q(notify_type=constants.DELETE_AD))
+	criterion2 = Q(seller=user) & (Q(notify_type=constants.UPDATE_BID) | Q(notify_type=constants.NEW_BID) | Q(notify_type=constants.REMOVE_BID))
+	notifications = Notification.objects.filter(criterion1 | criterion2).order_by('-timestamp').distinct()
+	for update in notifications:
+		if update.read_status :
+			break
+		else :
+			update.read_status = True
+			update.save()
+
+		return render(request, 'notifications.html',{'notifications':notifications})
+# @csrf_exempt
+# def accept_bid(request):
+# 	assert(request.method=='POST')
+# 	seller = request.user
+# 	ad_id = request.
+# 	Notification.objects.create(ad_id=ad_id,seller=ad.user,buyer=profile,
+# 			notify_type=constants.UPDATE_BID,read_status=false)
