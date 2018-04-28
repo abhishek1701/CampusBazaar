@@ -265,9 +265,10 @@ def logout_(request):
 
 @csrf_exempt
 def view_notifications(request):
-	user = request.user
-	criterion1 = Q(buyer=user) & (Q(notify_type=constants.ACCEPT_BID) | Q(notify_type=constants.DELETE_AD))
-	criterion2 = Q(seller=user) & (Q(notify_type=constants.UPDATE_BID) | Q(notify_type=constants.NEW_BID) | Q(notify_type=constants.REMOVE_BID))
+	assert(request.method == 'GET')
+	profile = Profile.objects.filter(user=request.user)[0]
+	criterion1 = Q(buyer=profile) & (Q(notify_type=constants.ACCEPT_BID) | Q(notify_type=constants.DELETE_AD))
+	criterion2 = Q(seller=profile) & (Q(notify_type=constants.UPDATE_BID) | Q(notify_type=constants.NEW_BID) | Q(notify_type=constants.REMOVE_BID))
 	notifications = Notification.objects.filter(criterion1 | criterion2).order_by('-timestamp').distinct()
 	for update in notifications:
 		if update.read_status :
@@ -276,7 +277,7 @@ def view_notifications(request):
 			update.read_status = True
 			update.save()
 
-		return render(request, 'notifications.html',{'notifications':notifications})
+	return render(request, 'notifications.html',{'notifications':notifications})
 # @csrf_exempt
 # def accept_bid(request):
 # 	assert(request.method=='POST')

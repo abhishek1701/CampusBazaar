@@ -1,0 +1,36 @@
+<!-- Display notifications related to the user -->
+{% extends "theme.html" %}
+
+{# Load the tag library #}
+{% load bootstrap3 %}
+
+{# Load CSS and JavaScript #}
+{% bootstrap_css %}
+{% bootstrap_javascript %}
+
+{% block head %}
+<title>{{NOTIFICATIONS}}</title>
+{% endblock %}  
+
+{% block body %}
+
+{% for update in notifications %}
+	{% if update.notify_type == 1 %}
+	<div class="jumbotron" >
+	  <p style="font-size: 30px"> {%bootstrap_label update.buyer.username %} updated bid for the ad {%bootstrap_label update.ad_id.title %} on {{update.timestamp}}</p>
+	</div>
+
+	{% elif update.notify_type == 2 %}
+	<div class="jumbotron" >
+	  <p style="font-size: 30px"> {%bootstrap_label update.seller.username %} accepted your bid for the ad {%bootstrap_label update.ad_id.title %} on {{update.timestamp}}</p>
+	</div>
+
+	{% else %}
+	<div class="jumbotron" >
+	  <p style="font-size: 30px"> {%bootstrap_label update.buyer.username %} placed bid for the ad {%bootstrap_label update.ad_id.title %} on {{update.timestamp}}</p>
+	</div>
+	{% endif %}
+
+{% endfor %}
+
+{% endblock %}
