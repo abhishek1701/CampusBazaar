@@ -15,8 +15,8 @@ urlpatterns = [
 	url(r'^add_tag/$',views.addTag,name='addtagURL'),
 	url(r'^tag_form/',views.tagForm,name='tagFormURL'),
 	url(r'^remove_tag/$',views.removeTag,name='removeTagURL'),
-	url(r'^remove_tag_form/',views.removeTagForm,name='remvoeTagFormURL'),
-
+	url(r'^remove_tag_form/',views.removeTagForm,name='removeTagFormURL'),
+	url(r'^notifications/',views.view_notifications,name='viewNotificationsURL'),
 	url(r'^feed/', views.feed,name='feed'),
 	url(r'^userprofile/',views.userProfile,name='userProfile'),
 	url(r'^product/',views.product,name='productURL'),

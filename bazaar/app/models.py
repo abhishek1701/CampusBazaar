@@ -18,6 +18,7 @@ class Profile(models.Model):
 	email=models.CharField(max_length=100,default='xyz@gmail.com')
 	image = models.ImageField(upload_to = 'pic_folder/', default = 'pic_folder/user.png')
 	followed_tags=models.ManyToManyField(Tag)
+	# notifications=models.OneToManyField(Notification)
 	def __str__(self):
 		return self.name
 
@@ -44,4 +45,12 @@ class CounterOffer(models.Model):
 	def __str__(self):
 		return str(self.id)
 
-
+class Notification(models.Model):
+	ad_id = models.ForeignKey(Advertisement,on_delete=models.DO_NOTHING)
+	seller = models.ForeignKey(Profile,related_name='%(class)s_seller',on_delete=models.DO_NOTHING)
+	buyer = models.ForeignKey(Profile,related_name='%(class)s_buyer',on_delete=models.DO_NOTHING)
+	notify_type = models.IntegerField(default=0)
+	read_status = models.BooleanField(default=0)
+	timestamp = models.DateTimeField(auto_now_add=True)
+	def __str__(self):
+		return str(self.id) 
