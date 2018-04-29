@@ -188,7 +188,6 @@ def filterAd(filter,profile):
 def feed(request):
 	assert(request.method == 'GET')
 	tags=list(Tag.objects.all())
-	print(tags[0].tag_name)
 	profile = Profile.objects.filter(user=request.user)[0]
 	ad_filter=request.GET.get('filter','')
 	ads=[]
@@ -217,7 +216,6 @@ def userProfile(request):
 		ads.append(ad_stat)
 
 	mybids=mybidlist(profile)
-	print(mybids[0]['bid'].offer)
 	return render(request, 'userprofile.html', {'profile':profile,'ads':ads,'media_url': MEDIA_URL,'mybids':mybids})
 
 @csrf_exempt
@@ -280,8 +278,8 @@ def mybidlist(profile):
 	bid_stat=[]
 	for bid in bids:
 		stat={}
-		ad=Advertisement.objects.get(id=1)
-		stat['ad']=ad
+		# ad=Advertisement.objects.get(id=bid.ad_id)
+		stat['ad']=bid.ad_id
 		stat['bid']=bid
 		bid_stat.append(stat)
 	return bid_stat
@@ -291,13 +289,12 @@ def mybidlist(profile):
 @csrf_exempt
 def deletebid(request):
 	assert(request.method=='POST')
-	ad_id=request.POST['ad']
+	bid_id=request.POST['bid']
 	next_=request.POST.get('next','')
 	bidder=Profile.objects.get(user=request.user)
-	
+	print(bid_id)
 	try:
-		ad=Advertisement.objects.get(id=ad_id)
-		co=CounterOffer.objects.get(ad_id=ad,user_id=bidder)
+		co=CounterOffer.objects.get(id=bid_id)
 		co.delete()
 		return HttpResponseRedirect(next_)
 	except CounterOffer.DoesNotExist:

@@ -218,7 +218,7 @@
 
                     <td>
                         <form action="{% url 'deleteBidURL' %}" method="POST">
-                                <input type="hidden" name="ad" value={{bid.bid}} />
+                                <input type="hidden" name="bid" value={{bid.bid}} />
                                 <input type="hidden" name="next" value={{request.path}} />
                                 <button onclick="this.parentNode.submit()">
                                     DELETE
