@@ -94,7 +94,6 @@ def signup(request):
 def postAd(request):
 	assert(request.method == 'POST')
 	form = AdForm(request.POST,request.FILES)
-	print(form)
 	if form.is_valid():
 		title = request.POST['title']
 		description=request.POST['description']
@@ -117,6 +116,29 @@ def adForm(request):
 	adstatus = request.GET.get('adstatus','')
 	return render(request, 'adform.html', {'adform':AdForm(),'adstatus':adstatus})
 
+@csrf_exempt
+# @login_required(login_url='/app/')
+def deleteAd(request):
+	assert(request.method == 'POST')
+	ad_id = request.POST['ad']
+	next_ = request.POST.get('next','')
+	while next_[-1]=='/':
+		next_=next_[:-1]
+	try:
+		ad=Advertisement.objects.get(id=ad_id)
+		ad.delete()
+		if next_!='':
+			encoding = urllib.parse.urlencode({'delstatus':"Advertisment deleted succesfully"})
+			return HttpResponseRedirect(next_+'/?'+encoding)
+		else:
+			return HttpResponseRedirect('/app/userprofile')
+
+	except Advertisement.DoesNotExist:
+		if next_!='':
+			encoding = urllib.parse.urlencode({'delstatus':"Advertisment doesn't exist"})
+			return HttpResponseRedirect(next_+'/?'+encoding)
+		else:
+			return HttpResponseRedirect('/app/userprofile')
 
 # @login_required(login_url='/index/')
 def tagForm(request):
@@ -194,7 +216,9 @@ def userProfile(request):
 		ad_stat['ad']=ad
 		ads.append(ad_stat)
 
-	return render(request, 'userprofile.html', {'profile':profile,'ads':ads,'media_url': MEDIA_URL})
+	mybids=mybidlist(profile)
+	print(mybids[0]['bid'].offer)
+	return render(request, 'userprofile.html', {'profile':profile,'ads':ads,'media_url': MEDIA_URL,'mybids':mybids})
 
 @csrf_exempt
 def product(request):
@@ -249,6 +273,38 @@ def bidList(request):
 		bids.append(bid)
 	print (bids)
 	return render(request,'bidlist.html',{'bids':bids})
+
+
+def mybidlist(profile):
+	bids=list(CounterOffer.objects.filter(user_id=profile))
+	bid_stat=[]
+	for bid in bids:
+		stat={}
+		ad=Advertisement.objects.get(id=1)
+		stat['ad']=ad
+		stat['bid']=bid
+		bid_stat.append(stat)
+	return bid_stat
+
+
+
+@csrf_exempt
+def deletebid(request):
+	assert(request.method=='POST')
+	ad_id=request.POST['ad']
+	next_=request.POST.get('next','')
+	bidder=Profile.objects.get(user=request.user)
+	
+	try:
+		ad=Advertisement.objects.get(id=ad_id)
+		co=CounterOffer.objects.get(ad_id=ad,user_id=bidder)
+		co.delete()
+		return HttpResponseRedirect(next_)
+	except CounterOffer.DoesNotExist:
+		return HttpResponseRedirect(next_)
+	except Advertisement.DoesNotExist:
+		return HttpResponseRedirect(next_)
+
 
 
 @csrf_exempt

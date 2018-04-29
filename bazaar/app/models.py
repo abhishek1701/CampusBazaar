@@ -25,7 +25,7 @@ class Profile(models.Model):
 
 
 class Advertisement(models.Model):
-	user = models.ForeignKey(Profile,on_delete=models.DO_NOTHING)
+	user = models.ForeignKey(Profile,on_delete=models.CASCADE)
 	image = models.ImageField(upload_to = 'ad_pic/', default = 'ad_pic/bat.png')
 	title = models.CharField(max_length = 200)
 	description = models.CharField(max_length = 500)
@@ -38,8 +38,8 @@ class Advertisement(models.Model):
 
 
 class CounterOffer(models.Model):
-	ad_id = models.ForeignKey(Advertisement,on_delete=models.DO_NOTHING)
-	user_id = models.ForeignKey(Profile,on_delete=models.DO_NOTHING)
+	ad_id = models.ForeignKey(Advertisement,on_delete=models.CASCADE)
+	user_id = models.ForeignKey(Profile,on_delete=models.CASCADE)
 	offer = models.FloatField(default=0.0)
 	comment=models.CharField(max_length=200)
 	def __str__(self):

@@ -96,6 +96,30 @@
         background-color: #3e80cd;
         color: white;
     }
+
+
+    #table2 {
+        font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+        border-collapse: collapse;
+        width: 100%;
+    }
+    
+    #table2 td, #table1 th {
+        border: 1px solid #ddd;
+        padding: 8px;
+    }
+
+    #table2 tr:nth-child(even){background-color: #f2f2f2;}
+
+    #table12 tr:hover {background-color: #ddd;}
+
+    #table2 th {
+        padding-top: 12px;
+        padding-bottom: 12px;
+        text-align: left;
+        background-color: #3e80cd;
+        color: white;
+    }
 </style>
 
 {% endblock %} 
@@ -126,13 +150,20 @@
     </div>
 </div>
 
+
+
+        <p style="color: red;">{{delstatus}}</p>
+
         <table id="table1" style="width:100%">
+
+
           <tr>
             <th>Posted Advertisement</th>
             <th>Offers</th> 
+            <th>Remove</th>
           </tr>
           {% for ad in ads %}
-         <tr>
+            <tr>
                     <td>
                     <form action="{% url 'bidListURL' %}" method="POST">
 
@@ -142,9 +173,66 @@
                     </form>
                     </td>
                     <td>{{ad.offer_count}}</td> 
-         </tr>
+
+
+                    <td>
+                    <form action="{% url 'deleteAdURL' %}" method="POST">
+                            <input type="hidden" name="ad" value={{ad.ad}} />
+                            <input type="hidden" name="next" value={{request.path}} />
+                            <button onclick="this.parentNode.submit()">
+                                DELETE
+                            </button>
+
+                    </form>
+                    </td>
+
+
+            </tr>
           {% endfor %}
         </table>
+
+
+        <br>
+        <br>
+
+        <table id="table2" style="width:100%">
+
+
+          <tr>
+            <th>Bided Advertisement</th>
+            <th>Offer</th> 
+            <th>Remove</th>
+          </tr>
+          {% for bid in mybids %}
+            <tr>
+                    <td>
+                    <form action="{% url 'productURL' %}" method="POST">
+
+                            <input type="hidden" name="ad" value={{bid.ad}} />
+                            <a href="#" onclick="location.href = '/app/product/?ad={{bid.ad}}';">{{bid.ad.title}}</a>
+
+                    </form>
+                    </td>
+                    <td>{{bid.bid.offer}}</td> 
+
+
+                    <td>
+                        <form action="{% url 'deleteBidURL' %}" method="POST">
+                                <input type="hidden" name="ad" value={{bid.bid}} />
+                                <input type="hidden" name="next" value={{request.path}} />
+                                <button onclick="this.parentNode.submit()">
+                                    DELETE
+                                </button>
+
+                        </form>
+                    </td>
+
+
+            </tr>
+          {% endfor %}
+        </table>
+
+
          
 </div>
 
