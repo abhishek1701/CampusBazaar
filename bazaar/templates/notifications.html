@@ -45,7 +45,7 @@
 	{% if update.notify_type == 1%}
 
 	  <form action="{% url 'bidListURL' %}" method="POST">
-        <input type="hidden" name="ad" value={{update.link_param}} />
+        <input type="hidden" name="ad" value={{update.link_param.id}} />
         <a href="#" onclick="this.parentNode.submit()">
 		  {% if update.read_status == True%}
 		
