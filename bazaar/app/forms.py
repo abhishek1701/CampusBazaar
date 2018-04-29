@@ -27,12 +27,12 @@ class SignUpForm(forms.Form):
 	phone = forms.IntegerField()
 	password = forms.CharField(widget = forms.PasswordInput())
 	image = forms.ImageField()
-	tags = forms.ModelMultipleChoiceField(
-		queryset = Tag.objects.all(),
-		widget = forms.CheckboxSelectMultiple(),
-		help_text = "<strong>Note:</strong> Select relevant tags from the above.",
+	#tags = forms.ModelMultipleChoiceField(
+	#	queryset = Tag.objects.all(),
+	#	widget = forms.CheckboxSelectMultiple(),
+	#	help_text = "<strong>Note:</strong> Select relevant tags from the above.",
 
-	)
+#	)
 	def __init__(self, *args, **kwargs):		
 		super(SignUpForm, self).__init__(*args, **kwargs)
 		self.helper = FormHelper()

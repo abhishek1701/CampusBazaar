@@ -1,0 +1,146 @@
+{% extends 'theme.html' %}
+{# Don't forget that one ! #}
+{% load static %}
+
+{# Load the tag library #}
+{% load bootstrap3 %}
+{% load crispy_forms_tags %}
+{% load crispy_forms_field %}
+
+{# Load CSS and JavaScript #}
+{% bootstrap_css %}
+{% bootstrap_javascript %}
+
+{% block head %}
+	<style type="text/css">
+		.bg-1 {
+            background-color:white;
+
+        }
+
+        body {
+      		background-color: #000000;
+      		color:white;
+      	}
+        h1{
+          text-align: center;
+        }
+		#searchBar{
+			width: 100%;
+		}
+		#product_list{
+				/*display: inline-block;*/
+				background-color: white
+		}
+
+		#product_box{
+			/*background: gray;*/
+			max-width: 300px;
+			min-height: 180px;
+			padding: 10px;
+			margin:10px;
+			background-color: white;
+			overflow: hidden;
+			border-style: solid;
+    		border-width: 2px;
+    		border-color: black;
+    		display:flex;
+    		color: black;
+
+			border: 1px solid #4CAF50;
+			text-align: center;
+  			box-shadow: 0px 0px 0px 4px #006B96;
+  			border: 4px solid #fff;
+  			border-top-left-radius: 5px;
+    		border-bottom-right-radius: 5px;
+
+		}
+		#product_image{
+			overflow: hidden;
+		}
+		#product_detail{
+			min-width: 120px;
+		}
+		#product_title{
+			display: block;
+			text-align: center;
+		}
+
+		#price_tag {
+			display: inline-block;
+			height: 50%;
+			width: 100%;
+			margin: 0px;
+			text-align: center;
+			/*text-align: center;*/
+
+		}
+
+
+		button {
+		  /*height: 30px;*/
+		  width: 100px;
+		  color:white;
+		  border-radius: 4px;
+		  background: #428cca;
+		  padding: 6px 10px;
+		  border: none;
+		  border-radius: 4px;
+		  cursor: pointer;
+		  margin-bottom: 10px;
+		}
+		p{
+			font-size: 15px;
+		}
+    #addTag{
+      margin-left: 100px;
+      margin-right: 100px;
+      align: left;
+    }
+    #delTag{
+      margin-left: 100px;
+      margin-right: 100px;
+      align: middle;
+    }
+    #delAd{
+      margin-left: 100px;
+      margin-right: 100px;
+      align: right;
+    }
+
+
+	</style>
+
+{% endblock %}
+
+
+{% block body %}
+
+<body>
+
+<div class ="panel">
+
+<div id="header">
+<h1>Admin Panel</h1>
+</div>
+
+<div id="buttons">
+
+<form action="new_tag.html">
+<button id="addTag">Add Tag</button>
+</form>
+
+<form action="del_tag.html">
+<button id="delTag">Delete Tag</button>
+</form>
+
+<form action="del_ad.html">
+<button id="delAd">Delete Ad</button>
+</form>
+
+</div>
+
+</div>
+</body>
+
+{% endblock %}
