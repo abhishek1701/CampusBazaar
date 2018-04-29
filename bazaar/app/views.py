@@ -349,3 +349,8 @@ def accept_bid(request):
 			notify_type=constants.ACCEPT_BID,read_status=False)
 	encoding = urllib.parse.urlencode({'bidstatus':"Bid accepted successfully!"})
 	return HttpResponseRedirect('/app/bidlist?'+encoding)
+
+@csrf_exempt
+def admin_control(request):
+	assert(request.method=='GET')
+	return render(request, 'adminControl.html')

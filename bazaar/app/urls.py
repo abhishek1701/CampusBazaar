@@ -33,5 +33,7 @@ urlpatterns = [
 	
 	url(r'^logout/',views.logout_,name='logoutURL'),
 	url(r'^accept_bid/',views.accept_bid,name='acceptBidURL'),
+	url(r'^admin/',views.admin_control,name='adminControlURL'),
+
 	# url(r'^filter_ad/',views.filterAd,name='filterAdURL')
 ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
