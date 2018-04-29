@@ -118,6 +118,11 @@
 		.sidenav a:hover {
 		    color: #064579;
 		}
+		.zoom:hover {
+		    -ms-transform: scale(1.2); /* IE 9 */
+		    -webkit-transform: scale(1.2); /* Safari 3-8 */
+		    transform: scale(1.2); 
+		}
 	</style>
 
 {% endblock %}  
@@ -142,8 +147,8 @@
 
 			<li style="display: inline-block;"> 
 				<div class="container" id="product_box">
-					<div  id="product_image">
-						<img src={{media_url}}{{ad.image}} height="150" width="150">
+					<div  id="product_image" >
+						<img class ="zoom" src={{media_url}}{{ad.image}} height="150" width="150">
 					</div>
 
 					<div  id="product_detail">
@@ -155,7 +160,7 @@
 								<h4 id ="price" style="display:  inline-block;"> Rs {{ad.price}}</h4>
 							</div>
 							<div id="product_view" >
-							<button id="view_button" onclick="location.href = '/app/product/?ad={{ad}}';" > View </button>
+							<button class="zoom" id="view_button" onclick="location.href = '/app/product/?ad={{ad}}';" > View </button>
 							</div>
 							
 						<!-- </div> -->

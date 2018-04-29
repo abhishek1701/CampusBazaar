@@ -14,23 +14,79 @@
 
 {% block body %}
 
-{% for update in notifications %}
-	{% if update.notify_type == 1 %}
-	<div class="jumbotron" >
-	  <p style="font-size: 30px"> {%bootstrap_label update.buyer.username %} updated bid for the ad {%bootstrap_label update.ad_id.title %} on {{update.timestamp}}</p>
-	</div>
+<style>
+	#notiftable {
+	    font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+	    border-collapse: collapse;
+	    width: 100%;
+	}
 
-	{% elif update.notify_type == 2 %}
-	<div class="jumbotron" >
-	  <p style="font-size: 30px"> {%bootstrap_label update.seller.username %} accepted your bid for the ad {%bootstrap_label update.ad_id.title %} on {{update.timestamp}}</p>
-	</div>
+	#notiftable td {
+	    border: 3px solid #ddd;
+	    padding: 2px;
+	}
+
+	#notiftable tr:hover {
+		 background-color: #428CCC;
+		color:black;
+	}
+
+</style>
+
+
+<table id="notiftable">
+ 
+{% for update in notifications %}
+
+ <tr>
+
+    <td>
+ 
+	{% if update.notify_type == 1%}
+
+	  {% if update.read_status == True%}
+	
+	  <p style="font-size: 15px;color:black" > &nbsp&nbsp {%bootstrap_label update.buyer.username %} updated bid for the ad {%bootstrap_label update.ad_id.title %}</p>
+
+	  {% else %}
+	  <p style="font-size: 15px;color:red" > &nbsp&nbsp {%bootstrap_label update.buyer.username %} updated bid for the ad {%bootstrap_label update.ad_id.title %}</p>
+
+	  {% endif %}
+
+
+	{% elif update.notify_type == 2%}
+
+	  {% if update.read_status == True%}
+
+	  <p style="font-size: 15px;color:black"> &nbsp {%bootstrap_label update.seller.username %} accepted your bid for the ad {%bootstrap_label update.ad_id.title %}</p>
+
+	  {% else %}
+	   <p style="font-size: 15px;color:red"> &nbsp {%bootstrap_label update.seller.username %} accepted your bid for the ad {%bootstrap_label update.ad_id.title %}</p>
+	
+	  {% endif %}
+	  
+
 
 	{% else %}
-	<div class="jumbotron" >
-	  <p style="font-size: 30px"> {%bootstrap_label update.buyer.username %} placed bid for the ad {%bootstrap_label update.ad_id.title %} on {{update.timestamp}}</p>
-	</div>
+	 
+	 {% if update.read_status == True%}
+
+	  <p style="font-size: 15px;color:black"> &nbsp {%bootstrap_label update.buyer.username %} placed bid for the ad {%bootstrap_label update.ad_id.title %}</p>
+	  {% else %}
+	  <p style="font-size: 15px;color:black"> &nbsp {%bootstrap_label update.buyer.username %} placed bid for the ad {%bootstrap_label update.ad_id.title %}</p>
+	  
+	   {% endif %}
+
 	{% endif %}
 
+	</td>
+	<td>
+	 <p style="font-size: 15px;color:black"> &nbsp {{update.timestamp}}</p>
+    </td>
+  </tr>
+
 {% endfor %}
+
+</table>
 
 {% endblock %}
