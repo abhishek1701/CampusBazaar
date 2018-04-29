@@ -42,6 +42,7 @@ class CounterOffer(models.Model):
 	user_id = models.ForeignKey(Profile,on_delete=models.CASCADE)
 	offer = models.FloatField(default=0.0)
 	comment=models.CharField(max_length=200)
+	status=models.BooleanField(default=0)
 	def __str__(self):
 		return str(self.id)
 

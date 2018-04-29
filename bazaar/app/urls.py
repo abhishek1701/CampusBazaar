@@ -31,5 +31,7 @@ urlpatterns = [
 	url(r'^bidlist/',views.bidList,name='bidListURL'),
 	url(r'^deletebid/',views.deletebid,name='deleteBidURL'),
 	
+	url(r'^logout/',views.logout_,name='logoutURL'),
+	url(r'^accept_bid/',views.accept_bid,name='acceptBidURL'),
 	# url(r'^filter_ad/',views.filterAd,name='filterAdURL')
 ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

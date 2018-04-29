@@ -264,15 +264,15 @@ def bid(request):
 def bidList(request):
 	assert(request.method=='POST')
 	ad_id = request.POST['ad']
-	# ad=Advertisement.objects.get(id=ad_id)
+	ad=Advertisement.objects.get(id=ad_id)
 	offers=CounterOffer.objects.filter(ad_id=ad_id)
 	bids=[]
 	for offer in offers:
 		bidder=Profile.objects.get(id=offer.user_id.id)
-		bid={'bidder':bidder.name,'phone':bidder.phone,'comment':offer.comment,'bid':offer.offer}	
+		bid={'bidder':bidder,'comment':offer.comment,'bid':offer.offer}	
 		bids.append(bid)
 	print (bids)
-	return render(request,'bidlist.html',{'bids':bids})
+	return render(request,'bidlist.html',{'bids':bids,'ad':ad})
 
 
 def mybidlist(profile):
@@ -339,10 +339,16 @@ def view_notifications(request):
 
 	return render(request, 'notifications.html',{'notifications':notifications})
 
-# @csrf_exempt
-# def accept_bid(request):
-# 	assert(request.method=='POST')
-# 	# seller = request.user
-# 	# ad_id = request.
-# 	Notification.objects.create(ad_id=ad_id,seller=ad.user,buyer=profile,
-# 			notify_type=constants.UPDATE_BID,read_status=false)
+@csrf_exempt
+def accept_bid(request):
+	assert(request.method=='POST')
+	ad_id = request.POST['ad']
+	ad=Advertisement.objects.get(id=ad_id)
+	# seller_id = request.POST['seller']
+	# seller = Profile.objects.get(id=seller_id)
+	bidder_id = request.POST['bidder']
+	bidder = Profile.objects.get(id=bidder_id)
+	Notification.objects.create(ad_id=ad,seller=ad.user,buyer=bidder,
+			notify_type=constants.ACCEPT_BID,read_status=False)
+	encoding = urllib.parse.urlencode({'bidstatus':"Bid accepted successfully!"})
+	return HttpResponseRedirect('/app/bidlist?'+encoding)

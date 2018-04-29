@@ -61,11 +61,15 @@
           </tr>
           {% for bid in bids %}
                 <tr>
-                    <td>{{bid.bidder}}</td>
+                    <td>{{bid.bidder.username}}</td>
                     <td>{{bid.comment}}</td> 
                     <td>{{bid.bid}}</td> 
                     <td>
-                    	<button> ACCEPT</button>
+                    	<form id="acceptform" action="{% url 'acceptBidURL' %}" method="POST">
+                        <input type="hidden" name="ad" value={{ad.id}} />
+                        <input type="hidden" name="bidder" value={{bid.bidder.id}} />
+                      </form>  
+                      <button form="acceptform" formmethod="POST"> ACTION</button>
                     </td> 
               </tr>
           {% endfor %}
