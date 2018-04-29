@@ -25,7 +25,7 @@ class Profile(models.Model):
 
 
 class Advertisement(models.Model):
-	user = models.ForeignKey(Profile,on_delete=models.CASCADE)
+	user = models.ForeignKey(Profile,on_delete=models.DO_NOTHING)
 	image = models.ImageField(upload_to = 'ad_pic/', default = 'ad_pic/bat.png')
 	title = models.CharField(max_length = 200)
 	description = models.CharField(max_length = 500)
@@ -47,9 +47,9 @@ class CounterOffer(models.Model):
 		return str(self.id)
 
 class Notification(models.Model):
-	ad_id = models.ForeignKey(Advertisement,on_delete=models.DO_NOTHING)
-	seller = models.ForeignKey(Profile,related_name='%(class)s_seller',on_delete=models.DO_NOTHING)
-	buyer = models.ForeignKey(Profile,related_name='%(class)s_buyer',on_delete=models.DO_NOTHING)
+	ad_id = models.ForeignKey(Advertisement,on_delete=models.CASCADE)
+	seller = models.ForeignKey(Profile,related_name='%(class)s_seller',on_delete=models.CASCADE)
+	buyer = models.ForeignKey(Profile,related_name='%(class)s_buyer',on_delete=models.CASCADE)
 	notify_type = models.IntegerField(default=0)
 	read_status = models.BooleanField(default=0)
 	timestamp = models.DateTimeField(auto_now_add=True)
