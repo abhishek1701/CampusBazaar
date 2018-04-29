@@ -240,9 +240,7 @@ def bid(request):
 def bidList(request):
 	assert(request.method=='POST')
 	ad_id = request.POST['ad']
-	# print(next_)
-	
-	ad=Advertisement.objects.get(id=ad_id)
+	# ad=Advertisement.objects.get(id=ad_id)
 	offers=CounterOffer.objects.filter(ad_id=ad_id)
 	bids=[]
 	for offer in offers:
@@ -269,19 +267,26 @@ def view_notifications(request):
 	profile = Profile.objects.filter(user=request.user)[0]
 	criterion1 = Q(buyer=profile) & (Q(notify_type=constants.ACCEPT_BID) | Q(notify_type=constants.DELETE_AD))
 	criterion2 = Q(seller=profile) & (Q(notify_type=constants.UPDATE_BID) | Q(notify_type=constants.NEW_BID) | Q(notify_type=constants.REMOVE_BID))
-	notifications = Notification.objects.filter(criterion1 | criterion2).order_by('-timestamp').distinct()
-	for update in notifications:
-		if update.read_status :
-			break
-		else :
-			update.read_status = True
-			update.save()
+	result = Notification.objects.filter(criterion1 | criterion2).order_by('-timestamp').distinct()
+	notifications = []
+	for r in result:
+		notify_obj = {'ad_id':r.ad_id,'seller':r.seller,'buyer':r.buyer,
+			'notify_type':r.notify_type,'read_status':r.read_status,'timestamp':r.timestamp}
+		if (r.notify_type == constants.UPDATE_BID or r.notify_type == constants.NEW_BID) :
+			notify_obj['link_param'] = r.ad_id	
+		# if (r.notify_type == constants.ACCEPT_BID) :
+
+		if (not(r.read_status)) :
+			r.read_status = True
+			r.save()
+		notifications.append(notify_obj)	
 
 	return render(request, 'notifications.html',{'notifications':notifications})
+
 # @csrf_exempt
 # def accept_bid(request):
 # 	assert(request.method=='POST')
-# 	seller = request.user
-# 	ad_id = request.
+# 	# seller = request.user
+# 	# ad_id = request.
 # 	Notification.objects.create(ad_id=ad_id,seller=ad.user,buyer=profile,
 # 			notify_type=constants.UPDATE_BID,read_status=false)

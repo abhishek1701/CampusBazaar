@@ -41,20 +41,23 @@
  <tr>
 
     <td>
- 
+	 <!-- UPDATE BID -->
 	{% if update.notify_type == 1%}
 
-	  {% if update.read_status == True%}
-	
-	  <p style="font-size: 15px;color:black" > &nbsp&nbsp {%bootstrap_label update.buyer.username %} updated bid for the ad {%bootstrap_label update.ad_id.title %}</p>
+	  <form action="{% url 'bidListURL' %}" method="POST">
+        <input type="hidden" name="ad" value={{update.link_param}} />
+        <a href="#" onclick="this.parentNode.submit()">
+		  {% if update.read_status == True%}
+		
+		  <p style="font-size: 15px;color:black" > &nbsp&nbsp {%bootstrap_label update.buyer.username %} updated bid for the ad {%bootstrap_label update.ad_id.title %}</p>
 
-	  {% else %}
-	  <p style="font-size: 15px;color:red" > &nbsp&nbsp {%bootstrap_label update.buyer.username %} updated bid for the ad {%bootstrap_label update.ad_id.title %}</p>
+		  {% else %}
+		  <p style="font-size: 15px;color:red" > &nbsp&nbsp {%bootstrap_label update.buyer.username %} updated bid for the ad {%bootstrap_label update.ad_id.title %}</p>
 
-	  {% endif %}
+		  {% endif %}</a> </form>		  
 
-
-	{% elif update.notify_type == 2%}
+	<!-- ACCEPT BID -->
+	{% elif update.notify_type == 2 %}
 
 	  {% if update.read_status == True%}
 
@@ -65,7 +68,20 @@
 	
 	  {% endif %}
 	  
+	<!-- NEW BID -->
+	{% elif update.notify_type == 3 %}
+	 
+		<form action="{% url 'bidListURL' %}" method="POST">
+        <input type="hidden" name="ad" value={{update.link_param}} />
+        <a href="#" onclick="this.parentNode.submit()">
+		  {% if update.read_status == True%}
+		
+		  <p style="font-size: 15px;color:black" > &nbsp&nbsp {%bootstrap_label update.buyer.username %} placed bid for the ad {%bootstrap_label update.ad_id.title %}</p>
 
+		  {% else %}
+		  <p style="font-size: 15px;color:red" > &nbsp&nbsp {%bootstrap_label update.buyer.username %} placed bid for the ad {%bootstrap_label update.ad_id.title %}</p>
+
+		  {% endif %}</a> </form>
 
 	{% else %}
 	 
