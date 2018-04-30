@@ -93,6 +93,7 @@ def signup(request):
 # 	return HttpResponse('hello')
 
 @csrf_exempt
+@login_required(login_url='/app/')
 def postAd(request):
 	assert(request.method == 'POST')
 	form = AdForm(request.POST,request.FILES)
@@ -112,14 +113,14 @@ def postAd(request):
 
 
 @csrf_exempt
-# @login_required(login_url='/app/')
+@login_required(login_url='/app/')
 def adForm(request):
 	assert(request.method == 'GET')
 	adstatus = request.GET.get('adstatus','')
 	return render(request, 'adform.html', {'adform':AdForm(),'adstatus':adstatus})
 
 @csrf_exempt
-# @login_required(login_url='/app/')
+@login_required(login_url='/app/')
 def deleteAd(request):
 	assert(request.method == 'POST')
 	ad_id = request.POST['ad']
@@ -152,6 +153,7 @@ def tagForm(request):
 	assert(request.method == 'GET')
 	tagstatus = request.GET.get('tagstatus','')
 	return render(request,'addtagform.html',{'addtagform':AddTagForm(),'tagstatus':tagstatus})
+
 # @login_required(login_url='/index/')
 def addTag(request):
 	assert(request.method == 'POST')
@@ -226,6 +228,7 @@ def userProfile(request):
 	return render(request, 'userprofile.html', {'profile':profile,'ads':ads,'media_url': MEDIA_URL,'mybids':mybids})
 
 @csrf_exempt
+@login_required(login_url='/app/')
 def product(request):
 	assert(request.method=='GET')
 	# profile = Profile.objects.filter(user=request.user)[0]
@@ -238,6 +241,7 @@ def product(request):
 
 
 @csrf_exempt
+@login_required(login_url='/app/')
 def bid(request):
 	assert(request.method=='POST')
 	bid = request.POST['bid']
@@ -266,6 +270,7 @@ def bid(request):
 
 #fetch list of bids for a particular advertisement
 @csrf_exempt
+@login_required(login_url='/app/')
 def bidList(request):
 	assert(request.method=='GET')
 	ad_id = request.GET.get('ad')
@@ -291,9 +296,8 @@ def mybidlist(profile):
 		bid_stat.append(stat)
 	return bid_stat
 
-
-
 @csrf_exempt
+@login_required(login_url='/app/')
 def deletebid(request):
 	assert(request.method=='POST')
 	bid_id=request.POST['bid']
@@ -312,6 +316,7 @@ def deletebid(request):
 
 
 @csrf_exempt
+@login_required(login_url='/app/')
 def logout_(request):
 	logout(request)
 	encoding = urllib.parse.urlencode({'loginstatus':"successfully logged out from CampusBazaar"})
@@ -322,6 +327,7 @@ def logout_(request):
 ################################### NOTIFICATIONS ##################################
 
 @csrf_exempt
+@login_required(login_url='/app/')
 def view_notifications(request):
 	assert(request.method == 'GET')
 	profile = Profile.objects.filter(user=request.user)[0]
@@ -346,6 +352,7 @@ def view_notifications(request):
 	return render(request, 'notifications.html',{'notifications':notifications})
 
 @csrf_exempt
+@login_required(login_url='/app/')
 def accept_bid(request):
 	assert(request.method=='GET')
 	ad_id = request.GET.get('ad')
@@ -364,6 +371,7 @@ def accept_bid(request):
 	# return requests.post('/app/bidlist/?', data=json.dumps(payload))
 
 @csrf_exempt
+@login_required(login_url='/app/')
 def view_seller(request):
 	assert(request.method=='GET')
 	seller_id = request.GET.get('seller') 
@@ -372,6 +380,7 @@ def view_seller(request):
 	return render(request, 'sellerprofile.html', {'profile':profile,'media_url': MEDIA_URL})
 
 @csrf_exempt
+@login_required(login_url='/app/')
 def admin_control(request):
 	assert(request.method=='GET')
 	return render(request, 'adminControl.html')
