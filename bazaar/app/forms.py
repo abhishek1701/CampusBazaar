@@ -97,7 +97,7 @@ class RemoveTagForm(forms.Form):
 
 class BidForm(forms.Form):
 	bid = forms.FloatField()
-	comment=forms.CharField()
+	comment=forms.CharField(required=False)
 	def __init__(self, *args, **kwargs):		
 		super(BidForm, self).__init__(*args, **kwargs)
 		self.helper = FormHelper()

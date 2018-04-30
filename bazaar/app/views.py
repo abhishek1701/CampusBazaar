@@ -314,7 +314,7 @@ def deletebid(request):
 @csrf_exempt
 def logout_(request):
 	logout(request)
-	encoding = urllib.parse.urlencode({'loginstatus':"successfully logout the bazaar"})
+	encoding = urllib.parse.urlencode({'loginstatus':"successfully logged out from CampusBazaar"})
 	return HttpResponseRedirect('/app/?'+encoding)
 	return HttpResponseRedirect('/')
 

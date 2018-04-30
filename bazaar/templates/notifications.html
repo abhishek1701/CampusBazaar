@@ -46,7 +46,7 @@
 
 	  <form action="{% url 'bidListURL' %}" method="GET">
         <input type="hidden" name="ad" value={{update.link_param.id}} />
-        <a href="#" onclick="this.parentNode.submit()">
+        <a style="text-decoration:none" href="#" onclick="this.parentNode.submit()">
 		  {% if update.read_status == True%}
 		
 		  <p style="font-size: 15px;color:black" > &nbsp&nbsp {%bootstrap_label update.buyer.username %} updated bid for the ad {%bootstrap_label update.ad_id.title %}</p>
@@ -60,7 +60,7 @@
 	{% elif update.notify_type == 2 %}
 		<form action="{% url 'sellerProfileURL' %}" method="GET">
         <input type="hidden" name="seller" value={{update.link_param.id}} />
-        <a href="#" onclick="this.parentNode.submit()">
+        <a style="text-decoration:none" href="#" onclick="this.parentNode.submit()">
 		  {% if update.read_status == True%}
 
 		  <p style="font-size: 15px;color:black"> &nbsp {%bootstrap_label update.seller.username %} accepted your bid for the ad {%bootstrap_label update.ad_id.title %}</p>
@@ -75,7 +75,7 @@
 	 
 		<form action="{% url 'bidListURL' %}" method="GET">
         <input type="hidden" name="ad" value={{update.link_param}} />
-        <a href="#" onclick="this.parentNode.submit()">
+        <a style="text-decoration:none" href="#" onclick="this.parentNode.submit()">
 		  {% if update.read_status == True%}
 		
 		  <p style="font-size: 15px;color:black" > &nbsp&nbsp {%bootstrap_label update.buyer.username %} placed bid for the ad {%bootstrap_label update.ad_id.title %}</p>
@@ -84,7 +84,19 @@
 		  <p style="font-size: 15px;color:red" > &nbsp&nbsp {%bootstrap_label update.buyer.username %} placed bid for the ad {%bootstrap_label update.ad_id.title %}</p>
 
 		  {% endif %}</a> </form>
+	
+	<!-- Delete AD -->
+	{% elif update.notify_type == 4 %}
+	 
+	 {% if update.read_status == True%}
 
+	  <p style="font-size: 15px;color:black"> &nbsp {%bootstrap_label update.buyer.username %} deleted the ad {%bootstrap_label update.meta_data %}</p>
+	  {% else %}
+	  <p style="font-size: 15px;color:red"> &nbsp {%bootstrap_label update.buyer.username %} deleted the ad {%bootstrap_label update.meta_data %}</p>
+	  
+	   {% endif %}
+
+	<!-- Delete BID -->
 	{% else %}
 	 
 	 {% if update.read_status == True%}
@@ -94,6 +106,7 @@
 	  <p style="font-size: 15px;color:black"> &nbsp {%bootstrap_label update.seller.username %} deleted the ad {%bootstrap_label update.meta_data %}</p>
 	  
 	   {% endif %}
+
 
 	{% endif %}
 
