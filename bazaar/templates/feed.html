@@ -104,7 +104,6 @@
 		    overflow-x: hidden;
 		    padding: 8px 0;
 		    float: left;
-		    height: 500px;
 		}
 
 		.sidenav a {
@@ -123,6 +122,10 @@
 		    -webkit-transform: scale(1.1); /* Safari 3-8 */
 		    transform: scale(1.1); 
 		}
+		.row {
+		  display: flex; /* equal height of the children */
+		}
+
 	</style>
 
 {% endblock %}  
@@ -132,6 +135,8 @@
 
 
 <body>
+
+<div class=row>
 
 <div class="sidenav">
 
@@ -180,6 +185,7 @@
 	}
 </script> -->
 
+</div>
 
 </body>
 {% endblock %}
