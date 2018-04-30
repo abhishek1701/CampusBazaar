@@ -47,11 +47,12 @@ class CounterOffer(models.Model):
 		return str(self.id)
 
 class Notification(models.Model):
-	ad_id = models.ForeignKey(Advertisement,on_delete=models.CASCADE)
+	ad_id = models.ForeignKey(Advertisement,null=True,on_delete=models.CASCADE)
 	seller = models.ForeignKey(Profile,related_name='%(class)s_seller',on_delete=models.CASCADE)
 	buyer = models.ForeignKey(Profile,related_name='%(class)s_buyer',on_delete=models.CASCADE)
 	notify_type = models.IntegerField(default=0)
 	read_status = models.BooleanField(default=0)
 	timestamp = models.DateTimeField(auto_now_add=True)
+	meta_data = models.CharField(max_length=100,default='')
 	def __str__(self):
 		return str(self.id) 

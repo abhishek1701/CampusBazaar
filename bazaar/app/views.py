@@ -128,7 +128,12 @@ def deleteAd(request):
 		next_=next_[:-1]
 	try:
 		ad=Advertisement.objects.get(id=ad_id)
+		offers = CounterOffer.objects.filter(ad_id=ad)
+		for offer in offers:
+			print("yes")
+			Notification.objects.create(ad_id=None,seller=ad.user,buyer=offer.user_id,notify_type=constants.DELETE_AD,read_status=False,meta_data=ad.title)
 		ad.delete()
+
 		if next_!='':
 			encoding = urllib.parse.urlencode({'delstatus':"Advertisment deleted succesfully"})
 			return HttpResponseRedirect(next_+'/?'+encoding)
@@ -326,7 +331,7 @@ def view_notifications(request):
 	notifications = []
 	for r in result:
 		notify_obj = {'ad_id':r.ad_id,'seller':r.seller,'buyer':r.buyer,
-			'notify_type':r.notify_type,'read_status':r.read_status,'timestamp':r.timestamp}
+			'notify_type':r.notify_type,'read_status':r.read_status,'timestamp':r.timestamp,'meta_data':r.meta_data}
 		if (r.notify_type == constants.UPDATE_BID or r.notify_type == constants.NEW_BID) :
 			notify_obj['link_param'] = r.ad_id	
 		if (r.notify_type == constants.ACCEPT_BID) :
@@ -334,6 +339,8 @@ def view_notifications(request):
 		if (not(r.read_status)) :
 			r.read_status = True
 			r.save()
+		if (r.notify_type == constants.DELETE_AD) :
+			print(r.meta_data)	
 		notifications.append(notify_obj)	
 
 	return render(request, 'notifications.html',{'notifications':notifications})

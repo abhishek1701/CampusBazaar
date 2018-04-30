@@ -89,13 +89,14 @@
 	 
 	 {% if update.read_status == True%}
 
-	  <p style="font-size: 15px;color:black"> &nbsp {%bootstrap_label update.buyer.username %} placed bid for the ad {%bootstrap_label update.ad_id.title %}</p>
+	  <p style="font-size: 15px;color:black"> &nbsp {%bootstrap_label update.seller.username %} deleted the ad {%bootstrap_label update.meta_data %}</p>
 	  {% else %}
-	  <p style="font-size: 15px;color:black"> &nbsp {%bootstrap_label update.buyer.username %} placed bid for the ad {%bootstrap_label update.ad_id.title %}</p>
+	  <p style="font-size: 15px;color:black"> &nbsp {%bootstrap_label update.seller.username %} deleted the ad {%bootstrap_label update.meta_data %}</p>
 	  
 	   {% endif %}
 
 	{% endif %}
+
 
 	</td>
 	<td>
