@@ -65,11 +65,16 @@
                     <td>{{bid.comment}}</td> 
                     <td>{{bid.bid}}</td> 
                     <td>
-                    	<form id="acceptform" action="{% url 'acceptBidURL' %}" method="POST">
+                    {% if bid.status == True %}
+                        <p style="color: red">ACCEPTED</p>  
+
+                    {% else%}
+                    	<form id="acceptform" action="{% url 'acceptBidURL' %}" method="GET">
                         <input type="hidden" name="ad" value={{ad.id}} />
                         <input type="hidden" name="bidder" value={{bid.bidder.id}} />
                       </form>  
-                      <button form="acceptform" formmethod="POST"> ACTION</button>
+                      <button form="acceptform" formmethod="GET"> ACTION</button>
+                    {% endif %}
                     </td> 
               </tr>
           {% endfor %}

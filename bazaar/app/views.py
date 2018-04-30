@@ -10,6 +10,8 @@ from django.contrib.auth.decorators import login_required
 from bazaar.settings import MEDIA_ROOT, MEDIA_URL
 from app.forms import *
 import urllib
+import requests
+import json
 from . import constants
 # Create your views here.
 # def index(request):
@@ -260,14 +262,14 @@ def bid(request):
 #fetch list of bids for a particular advertisement
 @csrf_exempt
 def bidList(request):
-	assert(request.method=='POST')
-	ad_id = request.POST['ad']
+	assert(request.method=='GET')
+	ad_id = request.GET.get('ad')
 	ad=Advertisement.objects.get(id=ad_id)
 	offers=CounterOffer.objects.filter(ad_id=ad_id)
 	bids=[]
 	for offer in offers:
 		bidder=Profile.objects.get(id=offer.user_id.id)
-		bid={'bidder':bidder,'comment':offer.comment,'bid':offer.offer}	
+		bid={'bidder':bidder,'comment':offer.comment,'bid':offer.offer,'status':offer.status}	
 		bids.append(bid)
 	print (bids)
 	return render(request,'bidlist.html',{'bids':bids,'ad':ad})
@@ -327,8 +329,8 @@ def view_notifications(request):
 			'notify_type':r.notify_type,'read_status':r.read_status,'timestamp':r.timestamp}
 		if (r.notify_type == constants.UPDATE_BID or r.notify_type == constants.NEW_BID) :
 			notify_obj['link_param'] = r.ad_id	
-		# if (r.notify_type == constants.ACCEPT_BID) :
-
+		if (r.notify_type == constants.ACCEPT_BID) :
+			notify_obj['link_param'] = r.seller
 		if (not(r.read_status)) :
 			r.read_status = True
 			r.save()
@@ -338,17 +340,29 @@ def view_notifications(request):
 
 @csrf_exempt
 def accept_bid(request):
-	assert(request.method=='POST')
-	ad_id = request.POST['ad']
+	assert(request.method=='GET')
+	ad_id = request.GET.get('ad')
 	ad=Advertisement.objects.get(id=ad_id)
 	# seller_id = request.POST['seller']
 	# seller = Profile.objects.get(id=seller_id)
-	bidder_id = request.POST['bidder']
+	bidder_id = request.GET.get('bidder')
 	bidder = Profile.objects.get(id=bidder_id)
 	Notification.objects.create(ad_id=ad,seller=ad.user,buyer=bidder,
 			notify_type=constants.ACCEPT_BID,read_status=False)
-	encoding = urllib.parse.urlencode({'bidstatus':"Bid accepted successfully!"})
+	co=CounterOffer.objects.get(ad_id=ad,user_id=bidder)
+	co.status = True
+	co.save()
+	encoding = urllib.parse.urlencode({'ad':ad_id})
 	return HttpResponseRedirect('/app/bidlist?'+encoding)
+	# return requests.post('/app/bidlist/?', data=json.dumps(payload))
+
+@csrf_exempt
+def view_seller(request):
+	assert(request.method=='GET')
+	seller_id = request.GET.get('seller') 
+	profile = Profile.objects.get(id=seller_id)
+	print()
+	return render(request, 'sellerprofile.html', {'profile':profile,'media_url': MEDIA_URL})
 
 @csrf_exempt
 def admin_control(request):
