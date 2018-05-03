@@ -50,7 +50,10 @@ def login_(request):
 			# profile = Profile.objects.filter(user=user)[0]
 			# ads =  list(Advertisement.objects.filter(user=profile))
 			# encoding = urllib.parse.urlencode({'ads':ads,'media_url':MEDIA_URL})
-			return HttpResponseRedirect('/app/feed/')
+			if(username == 'Admin'):
+				return HttpResponseRedirect('/app/admin/')
+			else:	
+				return HttpResponseRedirect('/app/feed/')
 			# return render(request, 'feed.html', {'ads':ads,'media_url': MEDIA_URL})
 		else:
 			return HttpResponseRedirect(next_)
@@ -154,7 +157,7 @@ def tagForm(request):
 	tagstatus = request.GET.get('tagstatus','')
 	return render(request,'addtagform.html',{'addtagform':AddTagForm(),'tagstatus':tagstatus})
 
-# @login_required(login_url='/index/')
+@login_required(login_url='/index/')
 def addTag(request):
 	assert(request.method == 'POST')
 	tag_name = request.POST['tag']
@@ -162,12 +165,12 @@ def addTag(request):
 		tag = Tag.objects.get(tag_name=tag_name)
 	except Tag.DoesNotExist:
 		Tag(tag_name = tag_name).save()
-		encoding = urllib.parse.urlencode({'tagstatus':"Tag added successfully!"})
-		return HttpResponseRedirect('/app/tag_form/?' + encoding)
-	encoding = urllib.parse.urlencode({'tagstatus':"Tag already exists!"})
-	return HttpResponseRedirect('/app/tag_form/?' + encoding)
+		# encoding = urllib.parse.urlencode({'tagstatus':"Tag added successfully!"})
+		return HttpResponseRedirect('/app/admin')
+	# encoding = urllib.parse.urlencode({'tagstatus':"Tag already exists!"})
+	return HttpResponseRedirect('/app/admin')
 
-# @login_required(login_url='/index/')
+@login_required(login_url='/index/')
 def removeTagForm(request):
 	assert(request.method == 'GET')
 	tagstatus = request.GET.get('tagstatus','')
@@ -178,12 +181,15 @@ def removeTag(request):
 	tags = [Tag.objects.get(tag_name=tag_id) for tag_id in request.POST.getlist('tags')]
 	try:
 		for tag in tags:
+			ads = Advertisement.objects.filter(tags__tag_name=tag)
+			for ad in ads:
+				ad.delete()
 			tag.delete()
-		encoding = urllib.parse.urlencode({'tagstatus':"Tag deleted successfully!"})
-		return HttpResponseRedirect('/app/remove_tag_form/?' + encoding)
+		# encoding = urllib.parse.urlencode({'tagstatus':"Tag deleted successfully!"})
+		return HttpResponseRedirect('/app/admin')
 	except Tag.DoesNotExist:
-		encoding = urllib.parse.urlencode({'tagstatus':"Tag doesn't exists!"})
-		return HttpResponseRedirect('/app/remove_tag_form/?' + encoding)
+		# encoding = urllib.parse.urlencode({'tagstatus':"Tag doesn't exists!"})
+		return HttpResponseRedirect('/app/admin')
 
 def filterAd(filter,profile):
 	if(filter=='ALL'):
