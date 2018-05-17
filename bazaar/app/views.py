@@ -9,8 +9,10 @@ from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.decorators import login_required
 from bazaar.settings import MEDIA_ROOT, MEDIA_URL
 from app.forms import *
+
+from app.decorators import *
 import urllib
-import requests
+# import requests
 import json
 from . import constants
 # Create your views here.
@@ -25,7 +27,7 @@ def index(request):
 	signupstatus = request.GET.get('signupstatus','')
 	next_ = request.GET.get('next','')
 	return render(request, 'login.html', {'loginform':AuthenticationForm(),
-		'loginstatus':loginstatus,'signupstatus':signupstatus,'next':next_})
+		'loginstatus':loginstatus,'admin':'admin','signupstatus':signupstatus,'next':next_})
 
 @csrf_exempt
 def signupForm(request):
@@ -151,13 +153,18 @@ def deleteAd(request):
 		else:
 			return HttpResponseRedirect('/app/userprofile')
 
-# @login_required(login_url='/index/')
+
+
+@login_required(login_url='/app/')
+@user_is_admin
 def tagForm(request):
 	assert(request.method == 'GET')
 	tagstatus = request.GET.get('tagstatus','')
 	return render(request,'addtagform.html',{'addtagform':AddTagForm(),'tagstatus':tagstatus})
 
-@login_required(login_url='/index/')
+
+@login_required(login_url='/app/')
+@user_is_admin
 def addTag(request):
 	assert(request.method == 'POST')
 	tag_name = request.POST['tag']
@@ -170,12 +177,16 @@ def addTag(request):
 	# encoding = urllib.parse.urlencode({'tagstatus':"Tag already exists!"})
 	return HttpResponseRedirect('/app/admin')
 
-@login_required(login_url='/index/')
+@login_required(login_url='/app/')
+@user_is_admin
 def removeTagForm(request):
 	assert(request.method == 'GET')
 	tagstatus = request.GET.get('tagstatus','')
 	return render(request,'removetagform.html',{'removetagform':RemoveTagForm(),'tagstatus':tagstatus})
 
+
+@login_required(login_url='/app/')
+@user_is_admin
 def removeTag(request):
 	assert(request.method=='POST')
 	tags = [Tag.objects.get(tag_name=tag_id) for tag_id in request.POST.getlist('tags')]
@@ -382,7 +393,6 @@ def view_seller(request):
 	assert(request.method=='GET')
 	seller_id = request.GET.get('seller') 
 	profile = Profile.objects.get(id=seller_id)
-	print()
 	return render(request, 'sellerprofile.html', {'profile':profile,'media_url': MEDIA_URL})
 
 @csrf_exempt
@@ -390,3 +400,4 @@ def view_seller(request):
 def admin_control(request):
 	assert(request.method=='GET')
 	return render(request, 'adminControl.html')
+

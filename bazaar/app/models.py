@@ -18,6 +18,7 @@ class Profile(models.Model):
 	email=models.CharField(max_length=100,default='xyz@gmail.com')
 	image = models.ImageField(upload_to = 'pic_folder/', default = 'pic_folder/user.png')
 	followed_tags=models.ManyToManyField(Tag)
+	admin=models.BooleanField(default=False)
 	# notifications=models.OneToManyField(Notification)
 	def __str__(self):
 		return self.name
